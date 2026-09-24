@@ -2,7 +2,7 @@
 
 A tiny text adventure with four rooms, illustrated scenes, a location map, and gentle room transitions. Start on the Rocks and use the arrow keys or direction buttons to explore.
 
-The Lamp Room door is always unlocked; visiting the Keeper's Kitchen is optional.
+The Lamp Room stays locked until you visit the Keeper's Kitchen. After that visit, the door remains unlocked for the rest of the session.
 
 The app uses Next.js, TypeScript, and plain CSS, preserving the original prototype's design and game rules. The original standalone prototype remains in `outputs/` as the visual reference.
 

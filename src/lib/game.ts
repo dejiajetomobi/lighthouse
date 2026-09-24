@@ -34,6 +34,9 @@ export function destination(roomId: RoomId, direction: Direction): RoomId | unde
 // All movement rules live here. No React, animation, DOM, or browser is needed.
 export function movePlayer(player: PlayerState, direction: Direction): PlayerState & { message: string } {
   const target = destination(player.roomId, direction);
+  if (target === "lamp" && !player.hasVisitedKitchen) {
+    return { roomId: player.roomId, hasVisitedKitchen: false, message: "The lamp room door is locked." };
+  }
   if (!target) {
     return {
       roomId: player.roomId,

@@ -1,5 +1,16 @@
 node_modules/
 dist/
+.next/
+.test-build/
+.open-next/
+.wrangler/
+out/
+*.tsbuildinfo
+next-env.d.ts
+.env*
+.dev.vars*
+!.dev.vars.example
+npm-debug.log*
 
 # Local working files and macOS metadata.
 work/

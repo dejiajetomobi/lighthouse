@@ -1,0 +1,44 @@
+name: Deploy lighthouse
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lighthouse-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+      WRANGLER_SEND_METRICS: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run lint
+      - run: npm run typecheck
+      - name: Build for Cloudflare Workers
+        run: npm run build:worker
+      - name: Deploy existing lighthouse Worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.LIGHTHOUSE }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "::error::Set the LIGHTHOUSE repository Actions secret to a Cloudflare Workers API token before deploying."
+            exit 1
+          fi
+          npm run deploy:built
+      - name: Deployment link
+        run: echo 'Deployed to https://lighthouse.ajetomobideji.workers.dev/' >> "$GITHUB_STEP_SUMMARY"
